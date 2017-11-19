@@ -25,7 +25,8 @@ $("#add-train-btn").on("click", function (event) {
         name: trainName,
         dest: trainDestination,
         time: trainTime,
-        frequency: trainFrequency
+        frequency: trainFrequency,
+      
     };
 
     //Upload train data to the database 
@@ -42,4 +43,48 @@ $("#add-train-btn").on("click", function (event) {
     $("#destination-input").val("");
     $("#first-train-time-input").val("");
     $("#frequency-input").val("");
+});
+
+// Firebase event to add trains 
+database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+console.log(childSnapshot.val());
+//Store into variable
+var trainName = childSnapshot.val().name;
+var trainDestination = childSnapshot.val().dest;
+var trainTime = childSnapshot.val().time;
+var trainFrequency = childSnapshot.val().frequency;
+
+//Train info
+console.log(trainName);
+console.log(trainDestination);
+console.log(trainTime);
+console.log(trainFrequency);
+
+
+
+//Moment JS 
+//First Time 
+var firstTime = trainTime;
+//First  Time Converted
+var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "years");
+console.log(firstTimeConverted);
+//Current Time
+var currentTime = moment();
+console.log("Current Time " + moment(currentTime).format("hh:mm"));
+//Difference between the times
+var diffTime = moment().diff(moment(firstTimeConverted), "minutes")
+console.log("Difference in time: " + diffTime);  
+//Time Apart 
+var tRemainder = diffTime % trainFrequency;
+console.log(tRemainder);
+//Minutes Until Train
+var tMinutesAway = trainFrequency - tRemainder;
+console.log("Minutes Away: " + tMinutesAway);
+//Next Arrival
+var nextTrain = moment().add(tMinutesAway, "minutes");
+console.log("Next Arrival: " + moment(nextTrain).format('HH : mm'));
+//Add data to table
+$("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + 
+ "</td><td>" + trainFrequency + "</td><td>" + nextTrain + "</td><td>" +tMinutesAway +  "</td></tr>");
+
 });
