@@ -82,9 +82,9 @@ var tMinutesAway = trainFrequency - tRemainder;
 console.log("Minutes Away: " + tMinutesAway);
 //Next Arrival
 var nextTrain = moment().add(tMinutesAway, "minutes");
-console.log("Next Arrival: " + moment(nextTrain).format('HH : mm'));
+console.log("Next Arrival: " + moment(nextTrain).format('HH:mm a'));
 //Add data to table
 $("#train-table > tbody").append("<tr><td>" + trainName + "</td><td>" + trainDestination + 
- "</td><td>" + trainFrequency + "</td><td>" + nextTrain + "</td><td>" +tMinutesAway +  "</td></tr>");
+ "</td><td>" + trainFrequency + "</td><td>" + moment(nextTrain).format('HH:mm a') + "</td><td>" +tMinutesAway +  "</td></tr>");
 
 });
